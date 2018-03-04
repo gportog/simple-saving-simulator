@@ -30,43 +30,51 @@ ERROR=${bldred}ERROR:${txtrst}
 WARN=${bldylw}WARNING:${txtrst}
 
 
-#check_common_input $amount $interest_rate $month_amount $callback
-check_common_input () {
- if [ $1 -gt 0 ]
+#check_amount_input $number $callback
+check_decimal_input () {
+ echo $1 > temp_file.txt
+ # checks if the temp_file.txt starts with a number of 1 to 9 that could be follow by 1 
+ # until 9 digits. Optionaly this number could be decimal:
+ match=`cat temp_file.txt | grep -P "^[1-9]{1,9}[\.[0-9]{1,4}]?$|^[1-9]{1,9}$"`
+ if [ -z $match ]
  then
-  if [[ $2 == ?(+|-)+([0-9]) ]] 
-  then
-   typeoF_interest_rate $2
-   if [ $3 -ge 0 ]
-   then
-    echo "$INFO Realizando os calculos..."
-   else
-    echo "$ERROR Depósito mensal inválido!"
-    $4
-   fi
-  else
-   echo "$ERROR Juro mensal inválido!"
-   $4
-  fi
- else
-  echo "$ERROR Quantia inicial inválida, o programa
-       apenas quantia inicial inteira!"
-  $4
- fi   
+  echo "$ERROR Quantia deve ser positiva!"
+	   $2
+ fi
 }
 
+#check_interest_rate_input $interest_rate $callback
+check_interest_rate_input () {
+ echo $1 > temp_file.txt
+ match=`cat temp_file.txt | grep -P "^[1-9]{1,2}$|^[0-9]{1,2}\.[0-9]{1,2}$"`
+ 
+ if [ -z $match ]
+ then
+  echo "$ERROR Valor inválido!"
+	   $2
+ fi
+
+ if [ $match = "0.0" ] || [ $match = "0.00" ]
+ then
+  echo "$ERROR Valor inválido!"
+       $2
+ fi
+
+ calc_interest_rate $1
+
+}
 
 #check_month_input $month $callback
 check_month_input () {
  if [ $1 -lt 1 ]
  then
-     echo "$ERROR Quantidade de meses inválida!"
+     echo "$ERROR Quantidade de meses deve ser inteira e positiva!"
      $2
  fi
 }
 
 #typeoF_interest_rate $interest_rate $callback
-typeoF_interest_rate() {
+calc_interest_rate() {
 interest_rate=`bc<<EOF
 scale=5
 $1/100
@@ -121,12 +129,17 @@ menu ()
 option_A() {
 
 echo ''
-read -p 'Quantidade inicial na poupança[R$]: ' amount
-read -p 'Rendimento mensal[%]: ' interest_rate
-read -p 'Depósitos mensais[R$]: ' month_amount
-read -p 'Período aplicado[meses]: ' month
 
-check_common_input $amount $interest_rate $month_amount option_A
+read -p 'Quantidade inicial na poupança[R$]: ' amount
+check_decimal_input $amount option_A
+
+read -p 'Rendimento mensal[%]: ' interest_rate
+check_interest_rate_input $interest_rate option_A
+
+read -p 'Depósitos mensais[R$]: ' month_amount
+check_decimal_input $amount option_A
+
+read -p 'Período aplicado[meses]: ' month
 check_month_input $month option_A
 
 for ((i=1; i<=$month; i++))
