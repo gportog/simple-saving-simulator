@@ -81,6 +81,12 @@ $1/100
 EOF`
 }
 
+# amount_month $callback
+amount_month() {
+  read -p 'Depósito desse mês[R$]: ' month_amount
+  check_decimal_input $month_amount $1
+}
+
 # continue_function $callback
 continue_function() {
  echo 'Deseja continuar a operação[Y/N]: '
@@ -176,5 +182,33 @@ echo $amount
 
 }
 
+option_B() {
+
+echo ''
+
+if [ -z $amount ] || [ -z $interest_rate ]
+then 
+ read -p 'Quantidade inicial na poupança[R$]: ' amount
+ check_decimal_input $amount option_B
+ read -p 'Rendimento mensal[%]: ' interest_rate
+ check_interest_rate_input $interest_rate option_B
+fi
+
+amount_month option_B
+
+profitability=`bc<<EOF
+scale=5
+$amount * $interest_rate
+EOF`
+ 
+amount=`bc<<EOF
+scale=5
+$amount + $profitability + $month_amount
+EOF`
+
+echo "Você terá disponível no próximo mês R$ $amount"
+continue_function option_B
+
+}
 
 menu
