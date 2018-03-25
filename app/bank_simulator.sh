@@ -30,7 +30,7 @@ ERROR=${bldred}ERROR:${txtrst}
 WARN=${bldylw}WARNING:${txtrst}
 
 
-#check_amount_input $number $callback
+# check_amount_input $number $callback
 check_decimal_input () {
  echo $1 > temp_file.txt
  # checks if the temp_file.txt starts with a number of 1 to 9 that could be follow by 1 
@@ -43,7 +43,7 @@ check_decimal_input () {
  fi
 }
 
-#check_interest_rate_input $interest_rate $callback
+# check_interest_rate_input $interest_rate $callback
 check_interest_rate_input () {
  echo $1 > temp_file.txt
  match=`cat temp_file.txt | grep -P "^[1-9]{1,2}$|^[0-9]{1,2}\.[0-9]{1,2}$"`
@@ -64,7 +64,7 @@ check_interest_rate_input () {
 
 }
 
-#check_month_input $month $callback
+# check_month_input $month $callback
 check_month_input () {
  if [ $1 -lt 1 ]
  then
@@ -73,12 +73,29 @@ check_month_input () {
  fi
 }
 
-#typeoF_interest_rate $interest_rate $callback
+# typeoF_interest_rate $interest_rate $callback
 calc_interest_rate() {
 interest_rate=`bc<<EOF
 scale=5
 $1/100
 EOF`
+}
+
+# continue_function $callback
+continue_function() {
+ echo 'Deseja continuar a operação[Y/N]: '
+ read -n1 option
+ case $option in
+	 y | Y )
+	       $1 ;;
+	 n | N )
+	 	   menu ;;
+	 * )
+		   echo''
+		   echo 'Opção inválida!'
+		   echo ''
+		   continue_function $1 ;;
+ esac	 
 }
 
 # ========================= APP ========================== #
