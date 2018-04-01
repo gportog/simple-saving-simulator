@@ -18,52 +18,9 @@
 ###############################################################################
 
 source "handlers.sh"
+source "menus.sh"
 
 # ========================= APP ========================== #
-
-menu ()
-{
- clear
- echo ''
- echo '###############################################################################'
- echo '#                                                                             #'
- echo '#                                                                             #'
- echo '#                      BANK.sh: Simulação de Poupança                         #'
- echo '# --------------------------------------------------------------------------- #'
- echo '#                                               Author:gportog  Version 1.1.0 #'
- echo '#                                                                             #'
- echo '#                                                                             #'
- echo '# A)Calculo sem imprevistos                                                   #'
- echo '# B)Calculo com imprevistos                                                   #'
- echo '# i)Info sobre opções A e B                                                   #'
- echo '# s)Sair do programa                                                          #'
- echo '#                                                                             #'
- echo '#                                                                             #'
- echo '###############################################################################' 
-	echo ''
-	echo 'Opção: '
-	read -n1 option
-	case $option in
-		a | A )
-			option_A;;
-		b | B )
-			option_B;;
-		i | I )
-			doc;;
-		s | S )
-			echo''
-			echo 'Saindo...'
-			sleep 3
-			exit ;;
-		* )
-			echo''
-			echo 'Opção inválida!'
-			echo ''
-			menu ;;
-	esac
-}
-
-
 option_A() {
 
 echo ''
@@ -123,29 +80,6 @@ EOF`
 
 echo "Você terá disponível no próximo mês R$ $amount"
 continue_function option_B
-
-}
-
-doc() {
-
- echo -e "
-  \n
-  ' ----------------------------------------------------------------------- '
-  '                              Documentation                              '
-  ' ----------------------------------------------------------------------- '
-  '                                                                         '
-  ' A Calculo sem imprevistos:                                              '
-  ' 	Você irá definir uma quantia inicial, juros iniciais em %,          '
-  '		e uma quantidade a depositar mensalmente na poupança, sem           '
-  '		considerar depósitos irregulares ou retirada da poupança.           '
-  ' B Calculo com imprevistos:                                              '
-  '		Você irá definir uma quantia inicial, juros iniciais em %,          '
-  '     porém dessa vez você irá considerar imprevistos, tais como:         ' 
-  '     depósitos irregulares ou retiradas mês à mês.                       '
-  '                                                                         '
-  ' ----------------------------------------------------------------------- '
-  \n"
- continue_function doc
 
 }
 
