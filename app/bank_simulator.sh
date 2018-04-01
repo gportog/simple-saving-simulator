@@ -134,7 +134,7 @@ menu ()
 		b | B )
 			option_B;;
 		i | I )
-			information;;
+			doc;;
 		s | S )
 			echo''
 			echo 'Saindo...'
@@ -208,6 +208,29 @@ EOF`
 
 echo "Você terá disponível no próximo mês R$ $amount"
 continue_function option_B
+
+}
+
+doc() {
+	
+ echo -e "
+  \n
+  ' ----------------------------------------------------------------------- '
+  '                              Documentation                              '
+  ' ----------------------------------------------------------------------- '
+  '                                                                         '
+  ' A Calculo sem imprevistos:                                              '
+  ' 	Você irá definir uma quantia inicial, juros iniciais em %,          '
+  '		e uma quantidade a depositar mensalmente na poupança, sem           '
+  '		considerar depósitos irregulares ou retirada da poupança.           '
+  ' B Calculo com imprevistos:                                              '
+  '		Você irá definir uma quantia inicial, juros iniciais em %,          '
+  '     porém dessa vez você irá considerar imprevistos, tais como:         ' 
+  '     depósitos irregulares ou retiradas mês à mês.                       '
+  '                                                                         '
+  ' ----------------------------------------------------------------------- '
+  \n"
+ continue_function doc
 
 }
 
